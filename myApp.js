@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 let express = require('express');
+let bodyParser = require('body-parser');
 let app = express();
 let path = require('path');
 
@@ -10,6 +11,8 @@ app.use((req, res, next) => {
 });
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
+
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'index.html'));
@@ -38,6 +41,12 @@ app.get('/:word/echo', (req, res) => {
 app.get('/name', (req, res) => {
   let firstname = req.query.first;
   let lastname = req.query.last;
+  res.json({ name: `${firstname} ${lastname}` });
+});
+
+app.post('/name', (req, res) => {
+  let firstname = req.body.first;
+  let lastname = req.body.last;
   res.json({ name: `${firstname} ${lastname}` });
 });
 
